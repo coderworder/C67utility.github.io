@@ -1,1 +1,48 @@
-const _0x53bb57=_0xef32;(function(_0x466608,_0x5a375b){const _0xc3029b=_0xef32,_0x4423b9=_0x466608();while(!![]){try{const _0x1fa4bb=parseInt(_0xc3029b(0xf7))/0x1+-parseInt(_0xc3029b(0xf5))/0x2+parseInt(_0xc3029b(0x10d))/0x3*(-parseInt(_0xc3029b(0x107))/0x4)+parseInt(_0xc3029b(0x10a))/0x5+parseInt(_0xc3029b(0xf3))/0x6+-parseInt(_0xc3029b(0xf9))/0x7+-parseInt(_0xc3029b(0x102))/0x8;if(_0x1fa4bb===_0x5a375b)break;else _0x4423b9['push'](_0x4423b9['shift']());}catch(_0x42fd66){_0x4423b9['push'](_0x4423b9['shift']());}}}(_0x391c,0x32793));const express=require('express'),fetch=require(_0x53bb57(0x10f)),cors=require(_0x53bb57(0x106)),bodyParser=require(_0x53bb57(0xfd)),app=express();function _0xef32(_0x5af7bf,_0x4d1014){const _0x391c78=_0x391c();return _0xef32=function(_0xef327c,_0x3d88fe){_0xef327c=_0xef327c-0xef;let _0x13f243=_0x391c78[_0xef327c];return _0x13f243;},_0xef32(_0x5af7bf,_0x4d1014);}app[_0x53bb57(0x104)](cors()),app[_0x53bb57(0x104)](bodyParser['json']()),app[_0x53bb57(0x104)](express['static']('public'));const TURNSTILE_SECRET=_0x53bb57(0x109),verifyTurnstile=async _0x112483=>{const _0xebda97=_0x53bb57,_0x446be2=await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify',{'method':_0xebda97(0x10e),'headers':{'Content-Type':'application/x-www-form-urlencoded'},'body':_0xebda97(0xf6)+TURNSTILE_SECRET+_0xebda97(0xfc)+_0x112483}),_0x432ce3=await _0x446be2[_0xebda97(0xef)]();return _0x432ce3[_0xebda97(0xf1)];};function _0x391c(){const _0x102cfe=['stringify','753JkStMn','POST','node-fetch','json','body','success','delete','1415268HqyNzX','application/json','152440JjiwFe','secret=','48673mcQzZs','Turnstile\x20verification\x20failed','1442728ZaKvzm','listen','status','&response=','body-parser','message','/api/delete','log','post','160456PwNuUH','statusText','use','fill','cors','2424iDJUIY','join','0x4AAAAAAB1JB__l-hQ8aWnypIjMDBPdMHM','1883375DoJSsl','Server\x20running\x20on\x20port\x203000'];_0x391c=function(){return _0x102cfe;};return _0x391c();}app[_0x53bb57(0x101)]('/api/spam',async(_0x100417,_0x40e84b)=>{const _0x25f185=_0x53bb57,{url:_0x400acc,message:_0x556881,repeat:_0x195d42,delay:_0x53bc0e,token:_0x368e17}=_0x100417[_0x25f185(0xf0)];if(!await verifyTurnstile(_0x368e17))return _0x40e84b['status'](0x193)[_0x25f185(0xef)]({'error':_0x25f185(0xf8)});try{await fetch(_0x400acc,{'method':'POST','headers':{'Content-Type':_0x25f185(0xf4)},'body':JSON[_0x25f185(0x10c)]({'content':Array(_0x195d42)[_0x25f185(0x105)](_0x556881)[_0x25f185(0x108)]('\x0a')})}),_0x40e84b[_0x25f185(0xef)]({'success':!![]});}catch(_0x28e735){_0x40e84b[_0x25f185(0xfb)](0x1f4)['json']({'error':_0x28e735[_0x25f185(0xfe)]});}}),app[_0x53bb57(0xf2)](_0x53bb57(0xff),async(_0x42fdf1,_0xc95b23)=>{const _0x1b38e5=_0x53bb57,{url:_0xc9975b,token:_0x139188}=_0x42fdf1['body'];if(!await verifyTurnstile(_0x139188))return _0xc95b23[_0x1b38e5(0xfb)](0x193)[_0x1b38e5(0xef)]({'error':_0x1b38e5(0xf8)});try{const _0x566e06=await fetch(_0xc9975b,{'method':'DELETE'});if(!_0x566e06['ok'])return _0xc95b23['status'](0x1f4)[_0x1b38e5(0xef)]({'error':_0x566e06[_0x1b38e5(0x103)]});_0xc95b23[_0x1b38e5(0xef)]({'success':!![]});}catch(_0x14c294){_0xc95b23['status'](0x1f4)['json']({'error':_0x14c294[_0x1b38e5(0xfe)]});}}),app[_0x53bb57(0xfa)](0xbb8,()=>console[_0x53bb57(0x100)](_0x53bb57(0x10b)));
+const express = require('express');
+const fetch = require('node-fetch');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.static('public')); 
+const TURNSTILE_SECRET = '0x4AAAAAAB1JB__l-hQ8aWnypIjMDBPdMHM';
+const verifyTurnstile = async (token) => {
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `secret=${TURNSTILE_SECRET}&response=${token}`
+    });
+    const data = await res.json();
+    return data.success;
+};
+app.post('/api/spam', async (req, res) => {
+    const { url, message, repeat, delay, token } = req.body;
+
+    if (!await verifyTurnstile(token)) return res.status(403).json({ error: 'Turnstile verification failed' });
+
+    try {
+        await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content: Array(repeat).fill(message).join('\n') })
+        });
+        res.json({ success: true });
+    } catch(e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+app.delete('/api/delete', async (req, res) => {
+    const { url, token } = req.body;
+
+    if (!await verifyTurnstile(token)) return res.status(403).json({ error: 'Turnstile verification failed' });
+
+    try {
+        const response = await fetch(url, { method: 'DELETE' });
+        if (!response.ok) return res.status(500).json({ error: response.statusText });
+        res.json({ success: true });
+    } catch(e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+app.listen(3000, () => console.log('Server running on port 3000'));
